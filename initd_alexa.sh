@@ -1,27 +1,27 @@
 #! /bin/bash
 
 ### BEGIN INIT INFO
-# Provides:          AlexaPi
+# Provides:          AlexaOPi
 # Required-Start:    $all
 # Required-Stop:     $all
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
-# Short-Description: AlexaPi Service
-# Description:       Start / Stop AlexaPi Service
+# Short-Description: AlexaOPi Service
+# Description:       Start / Stop AlexaOPi Service
 ### END INIT INFO
 
-exec > /var/log/alexa.log 2>&1 
+exec > /var/log/alexa.log 2>&1
 case "$1" in
 
 start)
     echo "Starting Alexa..."
-    python /root/AlexaPi/main.py &
+    python /opt/AlexaOPi/main.py &
 
 ;;
 
 stop)
     echo "Stopping Alexa.."
-    pkill -SIGINT ^main.py$
+    pkill -f AlexaOPi\/main\.py
 ;;
 
 restart|force-reload)

@@ -1,4 +1,4 @@
-# AlexaPi
+# AlexaOPi
  
 ---
  
@@ -6,20 +6,21 @@
  
 * Sam Machin
 * Dontze	
- 
+* GadgetReactor
 ---
  
-This is the code needed to Turn a Orange Pi into a client for Amazon's Alexa service, Sam Machin originally has developed this against Raspberry Pi 2 but I see no reason it shouldn't run on the other models. Feedback welcome.
+This is the code needed to Turn a Orange Pi into a client for Amazon's Alexa service, There's an onboard mic, so you just need an external speaker and a button. For the latest, refer to the voice-control branch.
+
 ---
  
 ### Requirements
 
 You will need:
-* A Orange Pi PC
-* An SD Card with a fresh install of Armbian (tested against Armbian v.5.0.5 Jessie Desktop)
+* A Orange Pi PC / Lite / PC Plus
+* An SD Card with a fresh install of Armbian (tested against Armbian v.5.20 Jessie Desktop)
 * An External Speaker with 3.5mm Jack
-* A push to make button connected between GPIO 37 and GND
-* (Optionally) A Dual colour LED (or 2 signle LEDs) Connected to GPIO 29 & 31
+* A push to make button connected between GPIO PA20 and GND
+* (Optionally) A Dual colour LED (or 2 signle LEDs) Connected to GPIO PA8 and PA9
 
 
 Next you need to obtain a set of credentials from Amazon to use the Alexa Voice service, login at http://developer.amazon.com and Goto Alexa then Alexa Voice Service
@@ -28,12 +29,11 @@ Make a note of these credentials you will be asked for them during the install p
 
 ### Installation
 
-Boot your fresh Pi and login to a command prompt as root.
+Boot your fresh Orange Pi and configure your network
 
-Make sure you are in /root
+Open a terminal and make sure you are in /opt
 
 Clone this repo to the Pi
-`git clone https://github.com/sammachin/AlexaPi.git`
 Run the setup script
 `./setup.sh`
 
@@ -47,10 +47,10 @@ If your alexa isn't running on startup you can check /var/log/alexa.log for errr
 
 If the error is complaining about alsaaudio you may need to check the name of your soundcard input device, use 
 `arecord -L` 
+
 The device name can be set in the settings at the top of main.py 
 
-You may need to adjust the volume and/or input gain for the microphone, you can do this with 
-`alsamixer`
+You may need to adjust the volume and/or input gain for the microphone, you can do this with `alsamixer`
 
 ### Advanced Install
 
@@ -67,13 +67,6 @@ The LED's are a visual indictor of status, I used a duel Red/Green LED but you c
 The internet_on() routine is testing the connection to the Amazon auth server as I found that running the script on boot it was failing due to the network not being fully established so this will keep it retrying until it can make contact before getting the auth token.
 
 The auth token is generated from the request_token the auth_token is then stored in a local memcache with and expiry of just under an hour to align with the validity at Amazon, if the function fails to get an access_token from memcache it will then request a new one from Amazon using the refresh token.
-
-
-
-
-
-
-
 
 ---
  

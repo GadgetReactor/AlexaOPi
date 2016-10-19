@@ -116,7 +116,7 @@ def alexa_speech_recognizer():
 
 def alexa_getnextitem(nav_token):
 	# https://developer.amazon.com/public/solutions/alexa/alexa-voice-service/rest/audioplayer-getnextitem-request
-	time.sleep(0.5)
+	time.sleep(0.8)
         if audioplaying == False:
 		if debug: print("{}Sending GetNextItem Request...{}".format(bcolors.OKBLUE, bcolors.ENDC))
 		GPIO.output(plb_light, GPIO.HIGH)
@@ -253,46 +253,12 @@ def process_response(r):
 			GPIO.output(lights, GPIO.LOW)
 
 
-def tuneinplaylist(url):
-	import sd
-	
-	sd = sd.StationDigger()
-	url = sd.traverseAlexa(url)
-	#return url
-	#"""
-
-	import re
-	import urllib2
-
-	req = requests.get(url)
-	r = requests.get(req.content)
-	html = r.content
-	urls = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', html)
-	if urls != None:	
-		for url in urls:
-			print "TuneIn Resolved URL:"
-			print url
-			return url
-	else:
-		return "no-file-found.mp3"
-
-#	for line in r.content.split('\n'):
-#		if line.startswith('File'):
-#			print (line)			
-#			list = line.split("=")[1:]
-#			print (list)
-#			nurl = "=".join(list)
-#			print (nurl)
-#			return nurl
-
 def play_audio(file, offset=0):
-	if file.startswith('http://opml.radiotime.com'):
-		file = tuneinplaylist(file)
 	global nav_token, p, audioplaying
 	if debug: print("{}Play_Audio Request for:{} {}".format(bcolors.OKBLUE, bcolors.ENDC, file))
 	GPIO.output(plb_light, GPIO.HIGH)
 	#i = vlc.Instance('--aout=alsa')
-	i = vlc.Instance('--aout=alsa', '--alsa-audio-device=hw:2,0')
+	i = vlc.Instance('--aout=alsa', '--alsa-audio-device=hw:0,0')
 	m = i.media_new(file)
 	print (file)
 	p = i.media_player_new()
